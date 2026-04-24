@@ -1,0 +1,395 @@
+/* ========== 1. RESET ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100vh;
+}
+
+body {
+    min-height: 120vh;
+    height: auto;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+}
+
+/* ========== 2. 水墨背景层 ========== */
+.ink-bg-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    opacity: 0.75;
+    mix-blend-mode: multiply;
+    filter: blur(1px);
+    background-image: url('../assets/bridge-ink-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* ========== 3. 展板容器（合并重复定义） ========== */
+.board {
+    width: 100%;
+    min-height: 100vh;
+    border: none;
+    padding: 13mm;
+    position: relative;
+    box-sizing: border-box;
+    overflow: visible;
+
+    /* 新中式复合背景（保留核心纹理） */
+    background:
+        /* 宣纸纹理 */
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='bfiber'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4' seed='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bfiber)' opacity='0.10'/%3E%3C/svg%3E"),
+        /* 底层浅色 */
+        linear-gradient(135deg, rgba(240, 235, 220, 0.2), rgba(230, 225, 210, 0.1));
+    background-size: auto, 100% 100%;
+    background-repeat: repeat, no-repeat;
+    background-color: #e2e6efbe;
+}
+
+/* 边框及四角墨点（保留） */
+.board::before {
+    content: '';
+    position: absolute;
+    top: 4mm;
+    left: 4mm;
+    right: 4mm;
+    bottom: 4mm;
+    border: 0.3mm solid rgba(184, 196, 212, 0.35);
+    pointer-events: none;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='15' cy='15' r='25' fill='%23333' opacity='0.12'/%3E%3Ccircle cx='25' cy='35' r='18' fill='%23444' opacity='0.08'/%3E%3Ccircle cx='40' cy='25' r='12' fill='%23555' opacity='0.06'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='85' cy='15' r='25' fill='%23333' opacity='0.12'/%3E%3Ccircle cx='75' cy='35' r='18' fill='%23444' opacity='0.08'/%3E%3Ccircle cx='60' cy='25' r='12' fill='%23555' opacity='0.06'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='15' cy='85' r='25' fill='%23333' opacity='0.10'/%3E%3Ccircle cx='30' cy='70' r='15' fill='%23444' opacity='0.07'/%3E%3Ccircle cx='20' cy='55' r='10' fill='%23555' opacity='0.05'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='85' cy='85' r='25' fill='%23333' opacity='0.10'/%3E%3Ccircle cx='70' cy='70' r='15' fill='%23444' opacity='0.07'/%3E%3Ccircle cx='80' cy='55' r='10' fill='%23555' opacity='0.05'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+    background-position: 0 0, 100% 0, 0 100%, 100% 100%;
+    background-repeat: no-repeat;
+}
+
+/* ========== 4. 标题 & 导航 ========== */
+.main-title {
+    font-size: 11mm;
+    font-family: "Ma Shan Zheng", "Noto Serif SC", "SimSun", serif;
+    font-weight: normal;
+    color: #7a3e2c;
+    text-align: center;
+    letter-spacing: 3mm;
+    margin-bottom: 3mm;
+    padding: 2mm 8mm 1.5mm;
+    border-bottom: 0.5mm solid rgba(100, 116, 139, 0.35);
+    position: relative;
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='20' viewBox='0 0 30 20'%3E%3Cpath d='M5 15 Q10 10 15 12 Q20 8 25 10 Q28 6 30 8' fill='none' stroke='%23c4a87d' stroke-width='0.6' opacity='0.6'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='20' viewBox='0 0 30 20'%3E%3Cpath d='M25 15 Q20 10 15 12 Q10 8 5 10 Q2 6 0 8' fill='none' stroke='%23c4a87d' stroke-width='0.6' opacity='0.6'/%3E%3C/svg%3E");
+    background-size: 30px 20px;
+    background-position: left center, right center;
+    background-repeat: no-repeat;
+}
+
+.main-title::before,
+.main-title::after {
+    content: '◆';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 3mm;
+    opacity: 0.7;
+}
+
+.main-title::before {
+    left: 15%;
+}
+
+.main-title::after {
+    right: 15%;
+}
+
+.section-title {
+    font-size: 5mm;
+    font-family: "Ma Shan Zheng", "Noto Serif SC", serif;
+    font-weight: normal;
+    color: #5e3a2b;
+    margin: 4mm 0 2.5mm;
+    padding: 1.5mm 3mm 1.5mm 2mm;
+    border-left: 2mm solid #b87333;
+    background: linear-gradient(90deg, rgba(232, 220, 200, 0.3), transparent);
+    scroll-margin-top: 60px;
+}
+
+/* ========== 5. 顶部与文字模块 ========== */
+.top-section {
+    display: flex;
+    gap: 3mm;
+    margin-bottom: 3mm;
+}
+
+.hero-image {
+    width: 35%;
+    height: 45mm;
+    border: 0.3mm solid rgba(148, 163, 184, 0.35);
+    object-fit: cover;
+}
+
+.vertical-text {
+    background: #f8fafc;
+    border-left: 1mm solid rgba(100, 116, 139, 0.35);
+    padding: 2mm 3mm;
+    font-size: 3mm;
+    line-height: 1.8;
+    color: #475569;
+}
+
+.info-section {
+    width: 62%;
+    display: flex;
+    flex-direction: column;
+    gap: 2mm;
+}
+
+.text-block {
+    background: #f8fafc;
+    border: 0.3mm solid rgba(148, 163, 184, 0.35);
+    padding: 2.5mm;
+    font-size: 2.8mm;
+    line-height: 1.7;
+    margin: 2mm 0;
+}
+
+.culture-icons {
+    display: flex;
+    gap: 1mm;
+    margin-top: 2mm;
+}
+
+.icon-item {
+    flex: 1;
+    text-align: center;
+    padding: 1.5mm;
+    background: #f0f4f8;
+    border: 0.2mm solid rgba(148, 163, 184, 0.35);
+}
+
+.icon-box {
+    background: #f8fafc;
+    border: 0.2mm dashed rgba(148, 163, 184, 0.35);
+    margin-bottom: 1mm;
+    padding: 1mm;
+}
+
+/* ========== 6. 表格 ========== */
+.data-table,
+.function-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 3.5mm;
+    border: 0.3mm solid rgba(168, 144, 112, 0.35);
+}
+
+th,
+td {
+    border: 0.3mm solid rgba(168, 144, 112, 0.35);
+    padding: 1.2mm;
+    text-align: center;
+}
+
+th {
+    background: #f0f4f8;
+    font-weight: bold;
+}
+
+.function-table td {
+    background: rgba(248, 250, 252, 0.5);
+}
+
+/* ========== 7. 卡片 & 图表容器 ========== */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2mm;
+    margin-top: 2mm;
+}
+
+.card {
+    background: rgba(248, 250, 252, 0.8);
+    border: 0.3mm solid rgba(148, 163, 184, 0.35);
+    padding: 2mm;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.card-title {
+    font-size: 3.2mm;
+    border-bottom: 0.2mm dashed #aaa;
+    margin-bottom: 1mm;
+}
+
+.diagram-box {
+    background: #f8fafc;
+    border: 0.3mm dashed rgba(148, 163, 184, 0.35);
+    margin: 2mm 0;
+    padding: 3mm;
+    text-align: center;
+}
+
+.interactive-chart {
+    padding: 3mm;
+    background: rgba(250, 246, 235, 0.5);
+    border: 0.3mm solid rgba(148, 163, 184, 0.35);
+    margin: 2mm 0;
+}
+
+/* ========== 8. 环形图 & 对比卡片交互（保留原样式） ========== */
+.ring-item {
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.ring-item:hover {
+    transform: scale(1.02);
+}
+
+.ring-percent {
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.compare-card {
+    cursor: pointer;
+    perspective: 100mm;
+}
+
+.card-inner {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+}
+
+.ring-item.selected svg circle:last-child {
+    filter: drop-shadow(0 0 0.6mm #2a2e39d5);
+}
+
+/* ========== 9. 工具栏 & 打印 ========== */
+.toolbar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(61, 43, 31, 0.9);
+    padding: 6px 15px;
+    border-radius: 30px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.tool-btn {
+    background: rgba(196, 169, 125, 0.3);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    color: white;
+    cursor: pointer;
+}
+
+@media print {
+    @page {
+        margin: 15mm;
+        size: A4;
+    }
+
+    body {
+        background: white;
+    }
+
+    .ink-bg-layer,
+    .toolbar {
+        display: none;
+    }
+
+    .board {
+        break-after: page;
+        padding: 5mm;
+        min-height: auto;
+    }
+
+    img {
+        break-inside: avoid;
+        max-height: 60vh;
+    }
+
+    .hero-image,
+    .diagram-box,
+    .card {
+        break-inside: avoid;
+    }
+}
+.size-label {
+    font-size: 1.8mm !important;
+}
+.size-label {
+    position: absolute;
+    bottom: 5mm;
+    left: 6mm;
+    font-size: 1.8mm;
+    /* 更小 */
+    color: #a89070;
+    font-family: "SimSun", "宋体", serif;
+}
+
+.page-number {
+    position: absolute;
+    bottom: 5mm;
+    right: 6mm;
+    font-size: 1.8mm;
+    /* 和左侧一致 */
+    color: #a89070;
+    font-family: "SimSun", "宋体", serif;
+}
+
+/* 页码的横线装饰也可以保留 */
+.page-number::before {
+    content: '— ';
+    opacity: 0.5;
+}
+
+.page-number::after {
+    content: ' —';
+    opacity: 0.5;
+}
+.icon-label {
+    font-size: 2.8mm;
+    /* 明显变小 */
+    color: #475569;
+    font-family: "SimSun", "宋体", serif;
+}
+.icon-box {
+    width: 100%;
+    height: 12mm;
+    background: #f8fafc;
+    border: 0.2mm dashed rgba(148, 163, 184, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1mm;
+    color: #a89070;
+    font-size: 2.8mm;
+    /* 调小 */
+    font-weight: normal;
+}
